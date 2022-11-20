@@ -5,14 +5,23 @@
     /* grid-template-columns: repeat(3,1fr); */
     flex-wrap: wrap;
     padding: 10px;
-    background-color:red;
+    /* background-color:red; */
     gap: 30px;
+    width: 100%;
+    }
+    .card{
+        height: fit-content;
+    }
+    .prix_titile{
+        display: flex;
+        justify-content: space-between;
     }
     #myimg{
         height: 180px;
+        
     }
     #fadd{
-    width: 70%;    
+    /* width: 70%;     */
     margin:auto;
     }
     #btnadd{
@@ -39,6 +48,10 @@
         display: flex;
     }
     
+  /* page aupdate  */
+  #basic-url{
+    background-image: url();
+  }
     
     
     

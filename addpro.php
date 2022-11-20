@@ -1,5 +1,7 @@
 <?php
+session_start();
 require 'conction.php';
+$dataca = mysqli_query($conn, "SELECT * FROM `category` WHERE 1");
 if(isset($_POST['submit'])){
     $name=htmlspecialchars($_POST['name']);
     $prix=htmlspecialchars($_POST['prix']);
@@ -14,7 +16,6 @@ if(isset($_POST['submit'])){
         $tmpName=$_FILES["image"]["tmp_name"];
         $validExtisin=['jpg','jpeg','png'];
         $imageEx=explode('.',$FileName);
-        
         $imageEx=strtolower(end($imageEx));
         if(! in_array($imageEx,$validExtisin)){
             echo 
@@ -26,9 +27,16 @@ if(isset($_POST['submit'])){
             move_uploaded_file($tmpName,'img/'.$newImageName);
            $qury="INSERT INTO `product`(`name`, `description`, `prix`, `id_c`, `image`) VALUES ('$name','$description',$prix,$Category,'$newImageName')";
            // $qury="INSERT INTO `product`(`name`, `description`, `prix`, `id_c`, `image`) VALUES ('$name','$description',$prix,$Category,$newImageName)";
-            mysqli_query($conn,$qury);
-            echo
-            "<script>alert('Successfully Added');</script>";
+            $qury_runn= mysqli_query($conn,$qury);
+            if($qury_runn){
+              $_SESSION['messge']="Successfully ";
+              header("Location:data.php");
+            }
+            else{
+             $_SESSION['messge']="Prodact not add";
+             header("Location:data.php");
+            }
+          
 
         }
 
@@ -44,47 +52,9 @@ if(isset($_POST['submit'])){
     <!-- CSS only -->
     <link rel="stylesheet" href="style.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">    
-<title>Document</title>
-
+<title>add prodact</title>
 </head>
 <body>
-<!-- <form action="" class="" method="POST" autocomplete="off" enctype="multipart/form-data" >
-    <div class="container text-center">
-    <div class="row justify-content-md-center">           
-<div class="col">
-<label for="name"> Nom</label>
- <input type="text" name="name">
-</div>
-<div class="col">
-<label for="prix"> Prix</label>
- <input type="text" name="prix">
-</div>
-<div class="col">
-<label for="Category">Category</label>
- <select name="Category" id="">
-    <option value="12">play</option>
-    <option value="12">xbox</option>
- </select>
-</div>
-</div>
-<div class="row"> 
-<div class="col"> 
-    <label for="description"> description</label>
-
- <textarea name="description" id="" cols="15" rows="4"></textarea>
-</div>
-
-<div class="col">
-<label for="Image">Image</label>
- <input type="file" name="image" id="image" accept=".jpg,jpeg,.png" value="">
-</div>
-<div>
-<button name="submit" type="submit" >Submit</button>
-</div>
-</div>
-</div>
-</form> -->
-
 <form id="fadd" method="POST" autocomplete="off" enctype="multipart/form-data" >
 <div class="input-group mb-3">
   <span class="input-group-text" id="basic-addon1">Name</span>
@@ -105,9 +75,13 @@ if(isset($_POST['submit'])){
 <div class="input-group mb-3">
 <span class="input-group-text">category</span>
 <select name="Category" class="form-control" name="" id="">
+    <?php foreach($dataca as $row){?>
+          <option value="<?php echo $row['id_c']; ?>"><?php echo $row['name']; ?></option>
+          <?php
+            } 
+          ?>
     <option value="12">play </option>
-    <option value="12">pc </option>
-    <option value="12">xbox </option>
+
 </select>
 
 </div>
